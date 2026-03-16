@@ -24,6 +24,31 @@ function waitForMathLive(callback, maxAttempts = 50) {
     check();
 }
 
+// 保存公式到存储
+function saveFormula(latex) {
+    try {
+        chrome.storage.sync.set({ 'savedFormula': latex }, () => {
+            console.log('✓ 公式已保存:', latex);
+        });
+    } catch (e) {
+        console.error('保存公式失败:', e);
+    }
+}
+
+// 从存储加载公式
+function loadFormula(callback) {
+    try {
+        chrome.storage.sync.get(['savedFormula'], (result) => {
+            const savedFormula = result.savedFormula || '';
+            console.log('✓ 加载已保存的公式:', savedFormula);
+            callback(savedFormula);
+        });
+    } catch (e) {
+        console.error('加载公式失败:', e);
+        callback('');
+    }
+}
+
 // 初始化应用
 function initApp() {
     const mathField = document.getElementById("mathField");
@@ -35,6 +60,22 @@ function initApp() {
     }
 
     console.log("开始初始化应用");
+
+    // 加载保存的公式
+    loadFormula((savedFormula) => {
+        if (savedFormula) {
+            try {
+                mathField.setValue(savedFormula, { mode: 'latex' });
+                console.log('✓ 已恢复保存的公式:', savedFormula);
+                // 触发预览更新
+                setTimeout(() => {
+                    updatePreview();
+                }, 100);
+            } catch (e) {
+                console.error('恢复公式失败:', e);
+            }
+        }
+    });
 
     // 导出 LaTeX
     document.getElementById("exportBtn").addEventListener("click", () => {
@@ -70,6 +111,20 @@ function initApp() {
         }
     });
 
+    // 清除公式
+    document.getElementById("clearBtn").addEventListener("click", () => {
+        try {
+            mathField.setValue('', { mode: 'latex' });
+            console.log("✓ 公式已清除");
+            preview.innerHTML = '';
+            // 清除存储中的公式
+            saveFormula('');
+        } catch (e) {
+            console.error("清除失败:", e);
+            alert("清除失败: " + e.message);
+        }
+    });
+
     // 实时预览函数
     const updatePreview = () => {
         try {
@@ -96,10 +151,23 @@ function initApp() {
         }
     };
 
-    // 监听编辑器事件
-    mathField.addEventListener('input', updatePreview);
-    mathField.addEventListener('update', updatePreview);
-    mathField.addEventListener('change', updatePreview);
+    // ...existing code...
+    mathField.addEventListener('input', () => {
+        updatePreview();
+        // 每次编辑时保存公式
+        const latex = mathField.getValue('latex');
+        saveFormula(latex);
+    });
+    mathField.addEventListener('update', () => {
+        updatePreview();
+        const latex = mathField.getValue('latex');
+        saveFormula(latex);
+    });
+    mathField.addEventListener('change', () => {
+        updatePreview();
+        const latex = mathField.getValue('latex');
+        saveFormula(latex);
+    });
 
     // 初始化一次预览
     console.log("初始化预览");
