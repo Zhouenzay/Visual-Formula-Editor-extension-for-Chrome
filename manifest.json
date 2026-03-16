@@ -1,0 +1,10 @@
+{
+  "manifest_version": 3,
+  "name": "MathLive Formula Editor",
+  "version": "1.0",
+  "description": "Visual formula editor using MathLive with virtual keyboard",
+  "action": {
+    "default_popup": "popup.html"
+  },
+  "permissions": ["clipboardWrite"]
+}

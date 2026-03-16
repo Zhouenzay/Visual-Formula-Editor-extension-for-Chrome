@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        math-field {
+            border: 1px solid #ccc;
+            min-height: 100px;
+            font-size: 24px;
+            padding: 10px;
+            margin-top: 5px;
+            display: block;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        #preview {
+            border: 1px solid #ddd;
+            padding: 10px;
+            margin-top: 5px;
+            min-height: 50px;
+            background-color: #f9f9f9;
+        }
+    </style>
+</head>
+<body>
+
+<h3>Formula Editor</h3>
+<math-field id="mathField" virtual-keyboard-mode="onfocus"></math-field>
+
+<div class="buttons">
+    <button id="exportBtn">Export LaTeX</button>
+    <button id="copyBtn">Copy</button>
+</div>
+
+<textarea id="latexOutput"></textarea>
+
+<h4>Preview</h4>
+<div id="preview"></div>
+
+<!-- 仅加载本地库 -->
+<script src="libs/mathlive.min.js"></script>
+<script src="popup.js"></script>
+
+</body>
+</html>
