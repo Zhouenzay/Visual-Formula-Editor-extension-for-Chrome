@@ -15,12 +15,6 @@ math-field {
     box-sizing: border-box;
 }
 
-textarea{
-    width:100%;
-    height:80px;
-    margin-top:10px;
-    box-sizing: border-box;
-}
 
 #preview{
     border:1px solid #ddd;

@@ -27,7 +27,6 @@ function waitForMathLive(callback, maxAttempts = 50) {
 // 初始化应用
 function initApp() {
     const mathField = document.getElementById("mathField");
-    const latexOutput = document.getElementById("latexOutput");
     const preview = document.getElementById("preview");
 
     if (!mathField) {
@@ -42,7 +41,13 @@ function initApp() {
         try {
             const latex = mathField.getValue('latex');
             console.log("导出 LaTeX:", latex);
-            latexOutput.value = latex;
+            // 复制到剪贴板
+            navigator.clipboard.writeText(latex).then(() => {
+                alert("LaTeX 已复制到剪贴板: " + latex);
+            }).catch(err => {
+                console.error("复制失败:", err);
+                alert("导出失败: " + err.message);
+            });
         } catch (e) {
             console.error("导出失败:", e);
             alert("导出失败: " + e.message);
