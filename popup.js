@@ -151,6 +151,84 @@ function initApp() {
         }
     };
 
+<<<<<<< Updated upstream
+=======
+    // 监听菜单显示事件并过滤
+    // 1. 右键菜单
+    mathField.addEventListener('contextmenu', (e) => {
+        console.log('✓ 右键菜单触发');
+        setTimeout(filterMathLiveMenu, 10);
+    });
+
+    // 2. 菜单按钮点击（三条杠）- 在整个文档上监听
+    document.addEventListener('click', (e) => {
+        // 检查是否点击了菜单按钮
+        const menuButton = e.target.closest('[data-test="menu-button"], .ML__menu-toggle, [aria-label*="menu"], [title*="Menu"], button[aria-label]');
+        if (menuButton) {
+            console.log('✓ 菜单按钮点击');
+            setTimeout(filterMathLiveMenu, 20);
+            setTimeout(filterMathLiveMenu, 50);
+        }
+    });
+
+    // 3. 捕获任何菜单打开事件（按键等）
+    document.addEventListener('keydown', (e) => {
+        // 某些快捷键可能打开菜单（Alt+M 等）
+        if ((e.altKey && e.key.toLowerCase() === 'm') || 
+            (e.ctrlKey && e.key.toLowerCase() === ',')) {
+            console.log('✓ 快捷键打开菜单');
+            setTimeout(filterMathLiveMenu, 20);
+        }
+    });
+
+    // 4. DOM 变化监听（捕获所有菜单出现）- 这是最可靠的方式
+    const observer = new MutationObserver((mutations) => {
+        let shouldFilter = false;
+        
+        mutations.forEach((mutation) => {
+            // 检查是否添加了菜单相关元素
+            if (mutation.addedNodes.length > 0) {
+                mutation.addedNodes.forEach(node => {
+                    if (node.nodeType === Node.ELEMENT_NODE) {
+                        const classList = node.classList || [];
+                        // 检查是否是菜单元素或包含菜单项
+                        if (classList.contains('ML__menu') ||
+                            classList.contains('ML__popover') ||
+                            classList.contains('ML__menu-toggle') ||
+                            classList.contains('ML__menu-item') ||
+                            classList.contains('ML__menu-group') ||
+                            node.getAttribute('role') === 'menu' ||
+                            node.hasAttribute('data-command')) {
+                            shouldFilter = true;
+                        }
+                    }
+                });
+            }
+            
+            // 检查是否改变了属性（如显示/隐藏）
+            if (mutation.type === 'attributes') {
+                if (mutation.target.classList && 
+                    (mutation.target.classList.contains('ML__menu') ||
+                     mutation.target.classList.contains('ML__popover'))) {
+                    shouldFilter = true;
+                }
+            }
+        });
+        
+        if (shouldFilter) {
+            console.log('✓ 检测到菜单变化，执行过滤');
+            filterMathLiveMenu();
+        }
+    });
+
+    observer.observe(document, {
+        childList: true,
+        subtree: true,
+        attributes: true,
+        attributeFilter: ['style', 'class', 'display']
+    });
+
+>>>>>>> Stashed changes
     // ...existing code...
     mathField.addEventListener('input', () => {
         updatePreview();
