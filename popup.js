@@ -1,17 +1,17 @@
 // 等待 MathLive 库加载完成
 function waitForMathLive(callback, maxAttempts = 50) {
     let attempts = 0;
-    
+
     function check() {
         console.log(`检查库加载 - 尝试 ${attempts + 1}/${maxAttempts}`);
         console.log("MathLive:", typeof window.MathLive);
-        
+
         if (typeof window.MathLive !== 'undefined') {
             console.log('✓ MathLive 已加载');
             callback();
             return;
         }
-        
+
         attempts++;
         if (attempts < maxAttempts) {
             setTimeout(check, 100);
@@ -20,7 +20,7 @@ function waitForMathLive(callback, maxAttempts = 50) {
             document.getElementById('preview').innerHTML = '<span style="color:red;">错误：MathLive 库加载失败</span>';
         }
     }
-    
+
     check();
 }
 
@@ -65,12 +65,9 @@ function initApp() {
     loadFormula((savedFormula) => {
         if (savedFormula) {
             try {
-                mathField.setValue(savedFormula, { mode: 'latex' });
+                mathField.setValue(savedFormula, { mode: 'math' });
                 console.log('✓ 已恢复保存的公式:', savedFormula);
-                // 触发预览更新
-                setTimeout(() => {
-                    updatePreview();
-                }, 100);
+                setTimeout(updatePreview, 100);
             } catch (e) {
                 console.error('恢复公式失败:', e);
             }
@@ -81,8 +78,6 @@ function initApp() {
     document.getElementById("exportBtn").addEventListener("click", () => {
         try {
             const latex = mathField.getValue('latex');
-            console.log("导出 LaTeX:", latex);
-            // 复制到剪贴板
             navigator.clipboard.writeText(latex).then(() => {
                 alert("LaTeX 已复制到剪贴板: " + latex);
             }).catch(err => {
@@ -95,30 +90,30 @@ function initApp() {
         }
     });
 
-    // 复制 LaTeX
-    document.getElementById("copyBtn").addEventListener("click", () => {
-        try {
-            const latex = mathField.getValue('latex');
-            console.log("复制 LaTeX:", latex);
-            navigator.clipboard.writeText(latex).then(() => {
-                console.log("✓ 已复制到剪贴板");
-            }).catch(err => {
-                console.error("复制失败:", err);
-                alert("复制失败: " + err.message);
-            });
-        } catch (e) {
-            console.error("获取 LaTeX 失败:", e);
-        }
-    });
-
-    // 清除公式
+    // ✅ 修复后的 clear（唯一版本）
     document.getElementById("clearBtn").addEventListener("click", () => {
         try {
-            
-            mathField.setValue('');
-            mathField.focus();
+            if (!mathField) {
+                console.error("mathField 不存在");
+                return;
+            }
 
+            // 1. 清空
+            mathField.setValue('');
+
+            // 2. 强制触发状态同步（关键）
+            mathField.dispatchEvent(new Event('input'));
+
+            // 3. 保存空状态
             saveFormula('');
+
+            // 4. 恢复焦点（否则你会误判为“不能输入”）
+            setTimeout(() => {
+                mathField.focus();
+            }, 0);
+
+            console.log("✓ 已清除公式");
+
         } catch (e) {
             console.error("清除失败:", e);
             alert("清除失败: " + e.message);
@@ -129,52 +124,45 @@ function initApp() {
     const updatePreview = () => {
         try {
             const latex = mathField.getValue('latex');
-            console.log("当前 LaTeX:", latex);
-            
+
             if (!latex || latex.trim() === '') {
                 preview.innerHTML = '';
                 return;
             }
-            
-            // 使用 MathLive 的内置渲染能力，生成 MathML
+
             const mathml = mathField.getValue('mathml');
             if (mathml) {
                 preview.innerHTML = mathml;
             } else {
-                // 备用：显示 LaTeX 代码本身
                 preview.textContent = '$' + latex + '$';
             }
-            console.log("✓ 预览更新成功");
         } catch(e) {
             console.error("预览更新错误:", e);
             preview.innerHTML = '<span style="color:red;">预览错误: ' + (e.message || e) + '</span>';
         }
     };
 
-    // ...existing code...
+    // 监听输入（自动保存 + 预览）
     mathField.addEventListener('input', () => {
         updatePreview();
-        // 每次编辑时保存公式
-        const latex = mathField.getValue('latex');
-        saveFormula(latex);
-    });
-    mathField.addEventListener('update', () => {
-        updatePreview();
-        const latex = mathField.getValue('latex');
-        saveFormula(latex);
-    });
-    mathField.addEventListener('change', () => {
-        updatePreview();
-        const latex = mathField.getValue('latex');
-        saveFormula(latex);
+        saveFormula(mathField.getValue('latex'));
     });
 
-    // 初始化一次预览
-    console.log("初始化预览");
+    mathField.addEventListener('update', () => {
+        updatePreview();
+        saveFormula(mathField.getValue('latex'));
+    });
+
+    mathField.addEventListener('change', () => {
+        updatePreview();
+        saveFormula(mathField.getValue('latex'));
+    });
+
+    // 初始化预览
     setTimeout(updatePreview, 200);
 }
 
-// 当 DOM 加载完成时，等待库加载
+// 启动
 document.addEventListener("DOMContentLoaded", () => {
     console.log("DOM 已加载");
     waitForMathLive(initApp);
