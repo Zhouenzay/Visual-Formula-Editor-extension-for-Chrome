@@ -74,23 +74,41 @@ function initApp() {
         }
     });
 
-    // 导出 LaTeX
+    // 导出 LaTex
     document.getElementById("exportBtn").addEventListener("click", () => {
         try {
+            if (!mathField) {
+                console.error("mathField 不存在");
+                alert("复制失败：编辑器未初始化");
+                return;
+            }
+
+            mathField.executeCommand(['switchMode', 'math']);
+
             const latex = mathField.getValue('latex');
-            navigator.clipboard.writeText(latex).then(() => {
-                alert("LaTeX 已复制到剪贴板: " + latex);
-            }).catch(err => {
-                console.error("复制失败:", err);
-                alert("导出失败: " + err.message);
-            });
+
+            if (!latex || latex.trim() === '') {
+                alert("公式为空，无法复制");
+                return;
+            }
+
+            navigator.clipboard.writeText(latex)
+                .then(() => {
+                    console.log("✓ LaTeX 已复制到剪贴板:", latex);
+                    alert("LaTeX 已复制到剪贴板");
+                })
+                .catch(err => {
+                    console.error("复制失败:", err);
+                    alert("复制失败: " + err.message);
+                });
+
         } catch (e) {
-            console.error("导出失败:", e);
-            alert("导出失败: " + e.message);
+            console.error("复制失败:", e);
+            alert("复制失败: " + e.message);
         }
     });
 
-    // ✅ 修复后的 clear（唯一版本）
+    // clear
     document.getElementById("clearBtn").addEventListener("click", () => {
         try {
             if (!mathField) {
