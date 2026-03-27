@@ -29,7 +29,7 @@ function saveFormula(latex) {
     try {
         chrome.storage.sync.set({ 'savedFormula': latex }, () => {
             console.log('✓ 公式已保存:', latex);
-            
+
         });
     } catch (e) {
         console.error('保存公式失败:', e);
