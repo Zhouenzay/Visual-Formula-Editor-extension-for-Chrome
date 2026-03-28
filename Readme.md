@@ -1,4 +1,4 @@
-VFE Release 1.0
+VFE Release 1.0  
 Chrome浏览器的公式编辑器插件  
 
 支持在Chrome浏览器（以及使用Chrome内核的浏览器，如Microsoft Edge，ChatGPT Atlas等）中以可视化方式编辑数学公式，并自动转化成latex代码
