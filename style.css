@@ -22,6 +22,17 @@ math-field {
     margin-top:5px;
     min-height:50px;
     background-color: #f9f9f9;
+    position: relative;
+}
+
+#preview::after {
+    content: "Preview";
+    position: absolute;
+    bottom: 5px;
+    right: 5px;
+    font-size: 18px;
+    color: #666;
+    font-weight: bold;
 }
 
 .buttons{

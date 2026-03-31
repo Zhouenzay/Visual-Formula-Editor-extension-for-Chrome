@@ -13,6 +13,16 @@
             display: block;
             width: 100%;
             box-sizing: border-box;
+            position: relative;
+        }
+        math-field::after {
+            content: "Visual Editor";
+            position: absolute;
+            bottom: 5px;
+            right: 5px;
+            font-size: 18px;
+            color: #666;
+            font-weight: bold;
         }
         #preview {
             border: 1px solid #000000;
@@ -25,7 +35,7 @@
 </head>
 <body>
 
-<h3>Formula Editor</h3>
+
 <math-field id="mathField" virtual-keyboard-mode="onfocus"></math-field>
 
 <div class="buttons">
@@ -35,7 +45,6 @@
 </div>
 
 
-<h4>Preview</h4>
 <div id="preview"></div>
 
 <!-- 仅加载本地库 -->
