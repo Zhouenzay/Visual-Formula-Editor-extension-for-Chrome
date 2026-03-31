@@ -180,17 +180,23 @@ function initApp() {
     // 初始化预览
     setTimeout(updatePreview, 200);
 
-    // Crab following mouse with delay
+    // Crab following mouse with smooth 60fps animation
     let targetX = 0;
     let currentX = 0;
     const crab = document.getElementById('crab');
+
+    // Add will-change for better performance
+    crab.style.willChange = 'transform';
+
     document.addEventListener('mousemove', (e) => {
         targetX = e.clientX - window.innerWidth / 2;
         // Clamp to prevent going out of bounds
         targetX = Math.max(-180, Math.min(180, targetX));
-    });
+    }, { passive: true });
+
     function animateCrab() {
-        currentX += (targetX - currentX) * 0.05; // Adjust 0.05 for delay speed
+        // Use a higher damping coefficient (0.15) for smoother, faster response
+        currentX += (targetX - currentX) * 0.15;
         crab.style.transform = `translateX(${currentX}px)`;
         requestAnimationFrame(animateCrab);
     }
