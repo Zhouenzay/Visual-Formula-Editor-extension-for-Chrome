@@ -96,7 +96,7 @@ function initApp() {
             navigator.clipboard.writeText(latex)
                 .then(() => {
                     console.log("✓ LaTeX 已复制到剪贴板:", latex);
-                    alert("LaTeX 已复制到剪贴板");
+                    //alert("LaTeX 已复制到剪贴板");
                 })
                 .catch(err => {
                     console.error("复制失败:", err);
