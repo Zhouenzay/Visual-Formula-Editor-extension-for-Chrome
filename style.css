@@ -1,7 +1,19 @@
+html {
+    margin: 0;
+    padding: 0;
+    border-radius: 20px;
+    background-color: white;
+    overflow: hidden;
+}
+
 body{
     font-family:Times New Roman;
     width:480px;
     padding:10px;
+    border-radius: 20px;
+    background-color: white;
+    margin: 0;
+    overflow: hidden;
 }
 
 math-field {
@@ -51,6 +63,17 @@ math-field {
     font-size: 16px;
     cursor: pointer;
     border-radius: 5px;
+    transition: background-color 0.3s ease, transform 0.1s ease;
+}
+
+#exportBtn:hover {
+    background-color: #45a049;
+    transform: translateY(-1px);
+}
+
+#exportBtn:active {
+    background-color: #3e8e41;
+    transform: translateY(0);
 }
 
 #clearBtn {
@@ -64,6 +87,17 @@ math-field {
     font-size: 16px;
     cursor: pointer;
     border-radius: 5px;
+    transition: background-color 0.3s ease, transform 0.1s ease;
+}
+
+#clearBtn:hover {
+    background-color: #da190b;
+    transform: translateY(-1px);
+}
+
+#clearBtn:active {
+    background-color: #b71c1c;
+    transform: translateY(0);
 }
 
 #crab {
@@ -71,4 +105,3 @@ math-field {
     transform: translateZ(0);
     backface-visibility: hidden;
 }
-

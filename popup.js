@@ -139,6 +139,12 @@ function initApp() {
         }
     });
 
+
+    // Toggle theme
+    document.getElementById("themeBtn").addEventListener("click", () => {
+        document.body.classList.toggle('dark');
+    });
+
     // 实时预览函数
     const updatePreview = () => {
         try {
