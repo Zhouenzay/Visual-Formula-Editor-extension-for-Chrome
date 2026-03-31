@@ -140,11 +140,6 @@ function initApp() {
     });
 
 
-    // Toggle theme
-    document.getElementById("themeBtn").addEventListener("click", () => {
-        document.body.classList.toggle('dark');
-    });
-
     // 实时预览函数
     const updatePreview = () => {
         try {
@@ -196,13 +191,13 @@ function initApp() {
 
     document.addEventListener('mousemove', (e) => {
         targetX = e.clientX - window.innerWidth / 2;
-        // Clamp to prevent going out of bounds
-        targetX = Math.max(-180, Math.min(180, targetX));
-    }, { passive: true });
+        // Clamp to prevent going out of bounds, increased range for more noticeable movement
+        targetX = Math.max(-240, Math.min(240, targetX));
+    });
 
     function animateCrab() {
-        // Use a higher damping coefficient (0.15) for smoother, faster response
-        currentX += (targetX - currentX) * 0.15;
+        // Increased damping coefficient for faster, more responsive movement
+        currentX += (targetX - currentX) * 0.3;
         crab.style.transform = `translateX(${currentX}px)`;
         requestAnimationFrame(animateCrab);
     }
