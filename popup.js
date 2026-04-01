@@ -75,39 +75,55 @@ function initApp() {
         }
     });
 
-    // 导出 LaTex
-    document.getElementById("exportBtn").addEventListener("click", () => {
-        try {
-            if (!mathField) {
-                console.error("mathField 不存在");
-                alert("复制失败：编辑器未初始化");
-                return;
-            }
+     // 切换 crab 的函数
+     const switchToCrabCopy = () => {
+         const crab = document.getElementById('crab');
+         const crabCopy = document.getElementById('crabCopy');
+         crab.style.display = 'none';
+         crabCopy.style.display = 'block';
+     };
 
-            mathField.executeCommand(['switchMode', 'math']);
+     const switchToCrabNormal = () => {
+         const crab = document.getElementById('crab');
+         const crabCopy = document.getElementById('crabCopy');
+         crab.style.display = 'block';
+         crabCopy.style.display = 'none';
+     };
 
-            const latex = mathField.getValue('latex');
+     // 导出 LaTex
+     document.getElementById("exportBtn").addEventListener("click", () => {
+         try {
+             if (!mathField) {
+                 console.error("mathField 不存在");
+                 alert("复制失败：编辑器未初始化");
+                 return;
+             }
 
-            if (!latex || latex.trim() === '') {
-                alert("公式为空，无法复制");
-                return;
-            }
+             mathField.executeCommand(['switchMode', 'math']);
 
-            navigator.clipboard.writeText(latex)
-                .then(() => {
-                    console.log("✓ LaTeX 已复制到剪贴板:", latex);
-                    //alert("LaTeX 已复制到剪贴板");
-                })
-                .catch(err => {
-                    console.error("复制失败:", err);
-                    alert("复制失败: " + err.message);
-                });
+             const latex = mathField.getValue('latex');
 
-        } catch (e) {
-            console.error("复制失败:", e);
-            alert("复制失败: " + e.message);
-        }
-    });
+             if (!latex || latex.trim() === '') {
+                 alert("公式为空，无法复制");
+                 return;
+             }
+
+             navigator.clipboard.writeText(latex)
+                 .then(() => {
+                     console.log("✓ LaTeX 已复制到剪贴板:", latex);
+                     //alert("LaTeX 已复制到剪贴板");
+                     switchToCrabCopy();
+                 })
+                 .catch(err => {
+                     console.error("复制失败:", err);
+                     alert("复制失败: " + err.message);
+                 });
+
+         } catch (e) {
+             console.error("复制失败:", e);
+             alert("复制失败: " + e.message);
+         }
+     });
 
     // clear
     document.getElementById("clearBtn").addEventListener("click", () => {
@@ -131,7 +147,10 @@ function initApp() {
                 mathField.focus();
             }, 0);
 
-            console.log("✓ 已清除公式");
+             console.log("✓ 已清除公式");
+
+             // 切换回原来的 crab
+             switchToCrabNormal();
 
         } catch (e) {
             console.error("清除失败:", e);
@@ -162,46 +181,52 @@ function initApp() {
         }
     };
 
-    // 监听输入（自动保存 + 预览）
-    mathField.addEventListener('input', () => {
-        updatePreview();
-        saveFormula(mathField.getValue('latex'));
-    });
+     // 监听输入（自动保存 + 预览）
+     mathField.addEventListener('input', () => {
+         updatePreview();
+         saveFormula(mathField.getValue('latex'));
+         switchToCrabNormal();
+     });
 
-    mathField.addEventListener('update', () => {
-        updatePreview();
-        saveFormula(mathField.getValue('latex'));
-    });
+     mathField.addEventListener('update', () => {
+         updatePreview();
+         saveFormula(mathField.getValue('latex'));
+         switchToCrabNormal();
+     });
 
-    mathField.addEventListener('change', () => {
-        updatePreview();
-        saveFormula(mathField.getValue('latex'));
-    });
+     mathField.addEventListener('change', () => {
+         updatePreview();
+         saveFormula(mathField.getValue('latex'));
+         switchToCrabNormal();
+     });
 
     // 初始化预览
     setTimeout(updatePreview, 200);
 
-    // Crab following mouse with smooth 60fps animation
-    let targetX = 0;
-    let currentX = 0;
-    const crab = document.getElementById('crab');
+     // Crab following mouse with smooth 60fps animation
+     let targetX = 0;
+     let currentX = 0;
+     const crab = document.getElementById('crab');
+     const crabCopy = document.getElementById('crabCopy');
 
-    // Add will-change for better performance
-    crab.style.willChange = 'transform';
+     // Add will-change for better performance
+     crab.style.willChange = 'transform';
+     crabCopy.style.willChange = 'transform';
 
-    document.addEventListener('mousemove', (e) => {
-        targetX = e.clientX - window.innerWidth / 2;
-        // Clamp to prevent going out of bounds, increased range for more noticeable movement
-        targetX = Math.max(-240, Math.min(240, targetX));
-    });
+     document.addEventListener('mousemove', (e) => {
+         targetX = e.clientX - window.innerWidth / 2;
+         // Clamp to prevent going out of bounds, increased range for more noticeable movement
+         targetX = Math.max(-240, Math.min(240, targetX));
+     });
 
-    function animateCrab() {
-        // Increased damping coefficient for faster, more responsive movement
-        currentX += (targetX - currentX) * 0.3;
-        crab.style.transform = `translateX(${currentX}px)`;
-        requestAnimationFrame(animateCrab);
-    }
-    animateCrab();
+     function animateCrab() {
+         // Increased damping coefficient for faster, more responsive movement
+         currentX += (targetX - currentX) * 0.3;
+         crab.style.transform = `translateX(${currentX}px)`;
+         crabCopy.style.transform = `translateX(${currentX}px)`;
+         requestAnimationFrame(animateCrab);
+     }
+     animateCrab();
 }
 
 // 启动
