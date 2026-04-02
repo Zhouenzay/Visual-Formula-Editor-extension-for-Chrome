@@ -5,7 +5,6 @@
     <link rel="stylesheet" href="style.css">
     <style>
         math-field {
-            border: 1px solid #000000;
             min-height: 100px;
             font-size: 24px;
             padding: 10px;
@@ -13,19 +12,44 @@
             display: block;
             width: 100%;
             box-sizing: border-box;
+            position: relative;
+        }
+        math-field::after {
+            content: "Visual Editor";
+            position: absolute;
+            bottom: 5px;
+            right: 5px;
+            font-size: 18px;
+            color: #666;
+            font-weight: bold;
         }
         #preview {
-            border: 1px solid #000000;
             padding: 10px;
             margin-top: 5px;
             min-height: 50px;
             background-color: #dadada;
         }
+        #crab {
+            font-size: 14px;
+            font-family: monospace;
+            text-align: center;
+            margin-top: 10px;
+            position: relative;
+            line-height: 1.2;
+        }
+        #crabCopy {
+            font-size: 14px;
+            font-family: monospace;
+            text-align: center;
+            margin-top: 10px;
+            position: relative;
+            line-height: 1.2;
+        }
     </style>
 </head>
 <body>
 
-<h3>Formula Editor</h3>
+
 <math-field id="mathField" virtual-keyboard-mode="onfocus"></math-field>
 
 <div class="buttons">
@@ -35,8 +59,21 @@
 </div>
 
 
-<h4>Preview</h4>
 <div id="preview"></div>
+
+
+<pre id="crab">
+    (\(\
+        ( •ᴗ•)  ↑
+        o_(")(")
+</pre>
+
+<pre id="crabCopy" style="display: none;">
+    (\(\
+        ( •ᴗ•)  👍
+        o_(")(")
+</pre>
+
 
 <!-- 仅加载本地库 -->
 <script src="libs/mathlive.min.js"></script>

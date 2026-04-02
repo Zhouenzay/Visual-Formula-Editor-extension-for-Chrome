@@ -1,7 +1,19 @@
+html {
+    margin: 0;
+    padding: 0;
+    border-radius: 20px;
+    background-color: white;
+    overflow: hidden;
+}
+
 body{
     font-family:Times New Roman;
     width:480px;
     padding:10px;
+    border-radius: 20px;
+    background-color: white;
+    margin: 0;
+    overflow: hidden;
 }
 
 math-field {
@@ -22,8 +34,74 @@ math-field {
     margin-top:5px;
     min-height:50px;
     background-color: #f9f9f9;
+    position: relative;
+}
+
+#preview::after {
+    content: "Preview";
+    position: absolute;
+    bottom: 5px;
+    right: 5px;
+    font-size: 18px;
+    color: #666;
+    font-weight: bold;
 }
 
 .buttons{
     margin-top:10px;
+
+}
+
+#exportBtn {
+    font-family: Times New Roman;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.3s ease, transform 0.1s ease;
+}
+
+#exportBtn:hover {
+    background-color: #45a049;
+    transform: translateY(-1px);
+}
+
+#exportBtn:active {
+    background-color: #3e8e41;
+    transform: translateY(0);
+}
+
+#clearBtn {
+    font-family: Times New Roman;
+    background-color: #f44336;
+    color: white;
+    border: none;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.3s ease, transform 0.1s ease;
+}
+
+#clearBtn:hover {
+    background-color: #da190b;
+    transform: translateY(-1px);
+}
+
+#clearBtn:active {
+    background-color: #b71c1c;
+    transform: translateY(0);
+}
+
+#crab {
+    will-change: transform;
+    transform: translateZ(0);
+    backface-visibility: hidden;
 }
