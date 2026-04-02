@@ -9,7 +9,7 @@ Chrome浏览器的公式编辑器插件VFE 3.0 Release
 
 ======================================================================================================================  
 
-VFE 2.0 Release, a formula editor plugin for Chrome (core) browsers that converts viusal formulas to latex code.  
+VFE 3.0 Release, a formula editor plugin for Chrome (core) browsers that converts viusal formulas to latex code.  
 
 Features include:  
 1. Editing common mathematical formulas, such as fractions, square roots, subscripts, and superscripts.
