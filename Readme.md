@@ -7,7 +7,6 @@ Chrome浏览器的公式编辑器插件VFE 3.0 Release
 2.行列式，微积分，求和，求积等  
 3.编辑内容自动保存，并在下次打开时恢复
 
-
 VFE 3.0 Release, a formula editor plugin for Chrome (core) browsers that converts viusal formulas to latex code.  
 
 Features include:  
