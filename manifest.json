@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Visual Formula Editor beta",
-  "version": "3.0",
+  "version": "4.0",
   "description": "Formula editor that convert visual formulas to latex code",
   "action": {
     "default_popup": "popup.html"
